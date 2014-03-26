@@ -1,0 +1,77 @@
+1. Show the names and country of European cities with more than 500,000 people.
+SELECT ci.name, ci.country 
+FROM encompasses AS en 
+INNER JOIN city AS ci ON en.country = ci.country 
+WHERE continent = 'Europe' AND population > 500000;
+
+2. Present in a table the languages, the number of countries they are spoken in, and the number of native speakers of each language.
+SELECT language.name, count(language.name), round(sum(percentage/100 * population), 0) 
+FROM language 
+INNER JOIN country ON code = country 
+GROUP BY language.name;
+
+3. Show the country and population for the second most and second least populous country.
+Most populous:
+SELECT name, population 
+FROM country 
+WHERE population < (SELECT max(population) FROM country) 
+ORDER BY population DESC 
+LIMIT 1;
+
+Least populous:
+SELECT name, population 
+FROM country 
+WHERE population > (SELECT min(population) FROM country) 
+ORDER BY population ASC 
+LIMIT 1;
+
+4. Which country has the population that is closest to the global average country population?
+SELECT name 
+FROM country 
+ORDER BY abs(population - (SELECT avg(population) FROM country)) ASC 
+LIMIT 1;
+
+5. In order, what are the 10 countries with the highest per capita GDP, and what is that per-capita GDP rounded to 3 digits?
+SELECT name, round(gdp/population, 3) as gdppc 
+FROM country
+INNER JOIN economy ON code = country 
+WHERE gdp IS NOT NULL 
+ORDER BY gdppc DESC 
+LIMIT 10;
+
+6. Present a table giving the names of the countries with ≥ 50% urbanization
+rates, their urbanization rates, and their per capita GDP. Note that
+urbanization rate is the percentage of population living in cities. Do not
+count cities with NULL values for population.
+
+SELECT country.name, round(sum(city.population)/country.population, 3) AS urban, round(gdp/country.population, 3) AS gdppc 
+FROM city 
+INNER JOIN country ON code = country 
+INNER JOIN economy ON code = economy.country 
+WHERE city.population IS NOT NULL 
+GROUP BY country.population, country.name, economy.gdp 
+HAVING round(sum(city.population)/country.population, 3) >= 0.5 
+ORDER BY urban DESC;
+
+7. Which organizations have as members all the European countries with over 50 million people?
+Fulkod som behöver förklaras. I stora drag hämtar vi alla Europeiska länder med befolkning större än 50000000 och joinar
+resultatet med ismember. Sen hämtar vi alla organisationer som har samma count i joinen med group by på organisation som antalet
+Europeiska länder med befolkning över 50000000.
+SELECT name 
+FROM organization 
+INNER JOIN (SELECT organization
+            FROM country 
+            INNER JOIN encompasses 
+            ON code = encompasses.country 
+            INNER JOIN ismember 
+            ON code = ismember.country 
+            WHERE population > 50000000 AND continent = 'Europe' 
+            GROUP BY organization 
+            HAVING count(ismember.country) = (SELECT count(*) 
+                                              FROM country 
+                                              INNER JOIN encompasses 
+                                              ON code = country 
+                                              WHERE population > 50000000 AND continent = 'Europe')) 
+            AS innerQuery 
+            ON abbreviation = innerQuery.organization;
+
