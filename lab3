@@ -1,0 +1,47 @@
+1.
+for $mountain in //mountain
+where $mountain/@height>8000
+return $mountain
+2.
+for $mountain in //mountain
+where $mountain/winter
+return $mountain/@name
+
+3. 
+for $range in //range
+where $range/@name = 'Himalayan'
+return $range/mountain/@name
+
+4.
+for $mountain in //mountain
+where $mountain/country = 'Nepal'
+return $mountain/@name
+
+5.
+for $mountain in //mountain
+return if (count($mountain/first/member) > 4) 
+then $mountain/first
+else if (count($mountain/winter/member) >member 4) 
+then $mountain/winter
+else
+
+6.
+for $m in //mountain
+order by $m/@height
+return $m/@name
+
+7.
+for $m in //mountain
+where not($m/winter)
+return $m/@name
+
+8.
+n distinct-values(//member)
+order by $m
+return $m
+
+9.
+for $m in //table
+where $m/@title = 'lhotseuppg9'
+return $m/tr/td[position() = 1 to 2]
+
