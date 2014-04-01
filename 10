@@ -1,0 +1,7 @@
+let $d := doc('tragedies.xml')
+let $m := doc('monsters.xml')
+let $mountainName := $m//mountain[nickname = "The Killing Mountain"]/@name
+
+for $x in $d//table
+where $x/@title=$mountainName
+return $x/tr/td[2]

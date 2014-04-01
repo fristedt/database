@@ -2,6 +2,7 @@
 for $mountain in //mountain
 where $mountain/@height>8000
 return $mountain
+
 2.
 for $mountain in //mountain
 where $mountain/winter
@@ -42,11 +43,5 @@ return $m
 
 9.
 for $m in //table
-where $m/@title = 'lhotseuppg9'
+where $m/@title = 'Lhotse'
 return $m/tr/td[position() = 1 to 2]
-
-for $d in doc('tragedies.xml')//mountain,
-$m in doc('monsters.xml')//table
-    where $whered/@nickname = 'The Killing Mountain'
-    return $d/@name
-
