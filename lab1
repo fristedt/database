@@ -75,3 +75,39 @@ INNER JOIN (SELECT organization
             AS innerQuery 
             ON abbreviation = innerQuery.organization;
 
+8. Give all countries that can be reached overland from Denmark. Thus China is in answer, but USA is not. Hint, use recursion. 
+WITH RECURSIVE Reaches(c1, c2) AS (
+    SELECT country1, country2 FROM borders WHERE country2 = 'DK' OR country1 = 'DK'
+  UNION                  
+    SELECT country1, country2 FROM Reaches, borders WHERE country1 = c1 OR country2 = c2 OR country1 = c2 OR country2 = c1
+)                                                                
+SELECT name 
+FROM Reaches 
+INNER JOIN country ON code = c1 
+UNION 
+SELECT name 
+FROM Reaches 
+INNER JOIN country ON code = c2;
+
+9. Create a view EightThousanders(name,mountains,height,coordinates) which
+includes the mountains over or equal to the height of 8000 meters. Query for
+the countries including EightThousanders. Try to avoid materializing the whole
+Mountain relation.  Verify via EXPLAIN ANALYSE.
+
+CREATE VIEW EightThousanders AS SELECT name, mountains, height, coordinates FROM mountain WHERE height >= 8000;
+SELECT DISTINCT name
+FROM country 
+INNER JOIN (SELECT country 
+            FROM geo_mountain
+            INNER JOIN EightThousanders ON mountain = name) AS asdf
+ON code = country;
+
+10. Write rules to enable updates to EightThousanders to be reﬂected back to
+Mountain. For example be able to rectify the injustice of Everest being taller
+than K2!  UPDATE EightThousanders SET Height = 8610 WHERE name=’Mount Everest’;
+
+CREATE RULE EightThousanders_Update AS
+ON UPDATE TO EightThousanders DO INSTEAD UPDATE mountain SET height = NEW.height
+WHERE name = NEW.name;
+
+
