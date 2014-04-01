@@ -45,3 +45,8 @@ for $m in //table
 where $m/@title = 'lhotseuppg9'
 return $m/tr/td[position() = 1 to 2]
 
+for $d in doc('tragedies.xml')//mountain,
+$m in doc('monsters.xml')//table
+    where $whered/@nickname = 'The Killing Mountain'
+    return $d/@name
+
