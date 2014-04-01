@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mountains>
+
+  <range name="Himalayan">
+    <mountain name="Everest" height="8848">
+      <country>China</country>
+      <country>Nepal</country>
+      <first date="29 May 1953"> 
+        <member>Edmund Hillary</member> 
+        <member>Tenzing Norgay</member> 
+      </first>
+      <winter date="17 Feb 1980">
+        <member>Krzysztof Wielicki</member>
+        <member>Leszek Cichy</member>
+      </winter>
+      <ascents>3684</ascents>
+      <deaths>210</deaths>
+    </mountain>
+    
+    <mountain name="Kangchenjunga" height="8586">
+      <country>Nepal</country>
+      <country>India</country>	
+      <first date="25 May 1955">
+        <member>George Band</member>
+        <member>Joe Brown</member>
+      </first>
+      <winter date="11 Jan 1986">
+        <member>Krzysztof Wielicki</member>
+        <member>Jerzy Kukuczka</member>
+      </winter>
+      <ascents>209</ascents>
+      <deaths>40</deaths>
+    </mountain>
+    
+    <mountain name="Lhotse" height="8516">
+      <country>China</country>
+      <country>Nepal</country>	
+      <first date="18 May 1956">	
+        <member>Fritz Luchsinger</member>
+        <member>Ernst Reiss</member>	
+      </first>
+      <winter date="31 Dec 1988">
+        <member>Krzysztof Wielicki</member>
+      </winter>
+      <ascents>221</ascents>
+      <deaths>11</deaths>
+    </mountain>
+    
+    <mountain name="Makalu" height="8485">	
+      <country>China</country>
+      <country>Nepal</country>
+      <first date="15 May 1955">
+        <member>Jean Couzy</member>
+        <member>Lionel Terray</member>
+      </first>
+      <winter date="09 Feb 2009">
+        <member>Simone Moro</member>
+        <member>Denis Urubko</member>	
+      </winter>
+      <ascents>234</ascents>
+      <deaths>26</deaths>
+    </mountain>
+    
+    <mountain name="Cho Oyu" height="8201">
+      <country>China</country>
+      <country>Nepal</country>
+      <first date="19 Oct 1954">
+        <member>Joseph Joechler</member>
+        <member>Pasang Dawa Lama</member>
+        <member>Herbert Tichy</member>
+      </first>
+      <winter date="12 Feb 1985">
+        <member>Maciej Berbeka</member>
+        <member>Maciej Pawlikowski</member>
+      </winter>
+      <ascents>2668</ascents>
+      <deaths>39</deaths>
+    </mountain>
+    
+    <mountain name="Dhaulagiri I" height="8611">
+      <country>Nepal</country>
+      <first date="13 May 1960">
+        <member>Kurt Diemberger</member>
+        <member>Peter Diener</member>
+        <member>Nawang Dorje</member>
+        <member>Nima Dorje</member>
+        <member>Ernst Forrer</member>
+        <member>Albin Schelbert</member>	
+      </first>
+      <winter date="21 Jan 1985">
+        <member>Andrzej Czok</member>
+        <member>Jerzy Kukuczka</member>
+      </winter>
+      <ascents>358</ascents>
+      <deaths>58</deaths>
+    </mountain>
+    
+    <mountain name="Manaslu" height="8163">
+      <country>Nepal</country>	
+      <first date="9 May 1956">	 
+        <member>Toshio Imanishi</member>
+        <member>Gyalzen Norbu</member>	
+      </first>
+      <winter date="12 Jan 1984">	 
+        <member>Maciej Berbeka</member>
+        <member>Ryszard Gajewski</member>
+      </winter>
+      <ascents>297</ascents>
+      <deaths>53</deaths>
+    </mountain>
+    
+    <mountain name="Nanga Parbat" height="8126">
+      <nickname>The Man Eater</nickname>
+      <nickname>The Killing Mountain</nickname>
+      <country>Pakistan</country>
+      <first date="03 Jul 1953">
+        <member>Hermann Buhl</member>	
+      </first>
+      <ascents>287</ascents>
+      <deaths>64</deaths>
+    </mountain>
+    
+    <mountain name="Annapurna I" height="8091">
+      <country>Nepal</country>
+      <first date="03 Jun 1950">
+        <member>Maurice Herzog</member>
+        <member>Louis Lachenal</member>	
+      </first>
+      <winter date="03 Feb 1987">	 
+        <member>Jerzy Kukuczka</member>
+        <member>Artur Hajzer</member>
+      </winter>
+      <ascents>153</ascents>
+      <deaths>59</deaths>
+    </mountain>
+    
+    <mountain name="Shishapangma" height="8027">
+      <country>China</country>
+      <first date="2 May 1964">	 
+        <member>Hsu Ching</member>
+        <member>Chang Chun-yen</member>
+        <member>Wang Fuzhou</member>
+        <member>Chen San</member>
+        <member>Cheng Tien-liang</member>
+        <member>Wu Tsung-yue</member>
+        <member>Sodnam Doji</member>
+        <member>Migmar Trashi</member>
+        <member>Doji Yonten</member>	
+      </first>
+      <winter date="14 Jan 2005">
+        <member>Piotr Morawski</member>
+        <member>Simone Moro</member>
+      </winter>
+      <ascents>274</ascents>
+      <deaths>23</deaths>
+    </mountain>
+  </range>
+
+  
+  <range name="Karakoram">
+    
+    <mountain name="K2" height="8611">
+      <nickname>Savage Mountain</nickname>
+      <country>Pakistan</country>
+      <country>China</country>	
+      <first date="31 Jul 1954">
+        <member>Achille Compagnoni</member>
+        <member>Lino Lacedelli</member>
+      </first>	
+      <ascents>284</ascents>
+      <deaths>66</deaths>
+    </mountain>
+
+    <mountain name="Gasherbrum I" height="8080">
+      <nickname>Hidden Peak</nickname>
+      <country>China</country>
+      <country>Pakistan</country>
+      <first date="05 Jul 1958">
+        <member>Andrew Kauffman</member>
+        <member>Pete Schoening</member>	
+      </first>
+      <winter date="09 Mar 2012">
+        <member>Adam Bielecki</member>
+        <member>Janusz Gołąb</member>
+      </winter>
+      <ascents>265</ascents>
+      <deaths>25</deaths>
+    </mountain>
+    
+    <mountain name="Broad Peak" height="8051">
+      <country>China</country>
+      <country>Pakistan</country>
+      <first date="09 Jun 1957">	
+        <member>Fritz Wintersteller</member>
+        <member>Marcus Schmuck</member>
+        <member>Kurt Diemberger</member>
+        <member>Hermann Buhl</member>	
+      </first>
+      <ascents>359</ascents>
+      <deaths>19</deaths>
+    </mountain>
+    
+    <mountain name="Gasherbrum II" height="8034">
+      <country>China</country>
+      <country>Pakistan</country>
+      <first date="07 Jul 1956">	 
+        <member>Fritz Moravec</member>
+        <member>Josef Larch</member>
+        <member>Hans Willenpart</member>	
+      </first>
+      <winter date="02 Feb 2011">
+        <member>Simone Moro</member>
+        <member>Denis Urubko</member>
+        <member>Cory Richards</member>
+      </winter>
+      <ascents>836</ascents>
+      <deaths>19</deaths>
+    </mountain>
+    
+  </range>
+
+</mountains>
