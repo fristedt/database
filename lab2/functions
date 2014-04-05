@@ -1,0 +1,12 @@
+CREATE OR REPLACE FUNCTION addIngredient(ingredient TEXT, recepie TEXT, amount int)
+RETURNS VOID AS $$
+BEGIN
+  IF EXISTS (SELECT name FROM FoodStuffs WHERE name = ingredient) THEN 
+    INSERT INTO UsedIn VALUES (ingredient, recepie, amount);
+    RETURN;
+  END IF;
+  INSERT INTO FoodStuffs VALUES (ingredient, 0);
+  INSERT INTO UsedIn VALUES (ingredient, recepie, amount);
+END;
+$$
+LANGUAGE plpgsql;

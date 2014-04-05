@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'pg'
 def conn 
   PG::Connection.new("nestor2.csc.kth.se", 5432, nil, nil, "hamfri", "hamfri", "ukDobkel")
@@ -92,6 +94,25 @@ def populate(conn)
               'Broccoli Stir Fry',
               'Fried rice',
               'Awesome stirt fry.')
+            ")
+
+  conn.exec("
+            SELECT addIngredient('long grain rice', 'Mexican Fried Rice', 300);
+            SELECT addIngredient('olive oil', 'Mexican Fried Rice', 30);
+            SELECT addIngredient('red chili pepper', 'Mexican Fried Rice', 1);
+            SELECT addIngredient('tomato', 'Mexican Fried Rice', 2 );
+            SELECT addIngredient('onion', 'Mexican Fried Rice', 1 );
+            SELECT addIngredient('garlic', 'Mexican Fried Rice', 2);
+            ")
+
+  conn.exec("
+            SELECT addIngredient('olive oil', 'Mushroom Quesadillas', 20);
+            SELECT addIngredient('champion mushroom', 'Mushroom Quesadillas', 200);
+            SELECT addIngredient('tomato', 'Mushroom Quesadillas', 1);
+            SELECT addIngredient('tortillas', 'Mushroom Quesadillas', 2);
+            SELECT addIngredient('basil', 'Mushroom Quesadillas', 20);
+            SELECT addIngredient('green bell pepper', 'Mushroom Quesadillas', 1);
+            SELECT addIngredient('taco cheese', 'Mushroom Quesadillas', 100);
             ")
 end
 
