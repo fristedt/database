@@ -1,40 +1,51 @@
 #!/usr/bin/env ruby
 
 require 'pg'
-def conn 
-  PG::Connection.new("nestor2.csc.kth.se", 5432, nil, nil, "hamfri", "hamfri", "ukDobkel")
-end
+require 'terminal-table'
+require 'highline/import'
 
-def init(conn)
-  conn.exec("CREATE TABLE FoodStuffs (
+class Kitchen
+  attr_reader :conn
+  
+  def initialize
+    @conn = PGconn.open("nestor2.csc.kth.se", 5432, nil, nil, "hamfri", "hamfri", "ukDobkel")
+    @conn.prepare("AddFood", "SELECT addFood($1, $2)")
+    @conn.prepare("DeleteFood", "SELECT deleteFood($1, $2)")
+    @conn.prepare("ListConditions", "SELECT listConditions($1)")
+    @conn.prepare("Cook", "SELECT cook($1)")
+  end
+
+  def reset
+    destroy
+    @conn.exec("CREATE TABLE FoodStuffs (
               name TEXT,
               amount INT,
               unit TEXT,
               PRIMARY KEY (name))
-            ")
-  conn.exec("CREATE TABLE Recepies (
+              ")
+    @conn.exec("CREATE TABLE Recepies (
               name TEXT,
               type TEXT,
               description TEXT,
               PRIMARY KEY (name))
-            ")
-  conn.exec("CREATE TABLE UsedIn (
+              ")
+    @conn.exec("CREATE TABLE UsedIn (
               ingredient TEXT,
               recepie TEXT,
               amount INT,
               PRIMARY KEY (ingredient, recepie),
               FOREIGN KEY (ingredient) REFERENCES FoodStuffs,
               FOREIGN KEY (recepie) REFERENCES Recepies)
-            ")
-  populate(conn)
-end
+              ")
+    populate
+  end
 
-def destroy(conn)
-  conn.exec("DROP TABLE FoodStuffs, Recepies, UsedIn")
-end
+  def destroy
+    @conn.exec("DROP TABLE FoodStuffs, Recepies, UsedIn")
+  end
 
-def populate(conn)
-  conn.exec("INSERT INTO FoodStuffs VALUES 
+  def populate
+    @conn.exec("INSERT INTO FoodStuffs VALUES 
             (
               'long grain rice',
               400,
@@ -79,9 +90,9 @@ def populate(conn)
               'soy sauce',
               null,
               'ml')
-            ")
+              ")
 
-  conn.exec("INSERT INTO Recepies VALUES
+    @conn.exec("INSERT INTO Recepies VALUES
             (
               'Mexican Fried Rice',
               'Fried rice',
@@ -94,18 +105,18 @@ def populate(conn)
               'Broccoli Stir Fry',
               'Fried rice',
               'Awesome stirt fry.')
-            ")
+              ")
 
-  conn.exec("
+    @conn.exec("
             SELECT addIngredient('long grain rice', 'Mexican Fried Rice', 300);
             SELECT addIngredient('olive oil', 'Mexican Fried Rice', 30);
             SELECT addIngredient('red chili pepper', 'Mexican Fried Rice', 1);
             SELECT addIngredient('tomato', 'Mexican Fried Rice', 2 );
             SELECT addIngredient('onion', 'Mexican Fried Rice', 1 );
             SELECT addIngredient('garlic', 'Mexican Fried Rice', 2);
-            ")
+              ")
 
-  conn.exec("
+    @conn.exec("
             SELECT addIngredient('olive oil', 'Mushroom Quesadillas', 20);
             SELECT addIngredient('champion mushroom', 'Mushroom Quesadillas', 200);
             SELECT addIngredient('tomato', 'Mushroom Quesadillas', 1);
@@ -113,6 +124,95 @@ def populate(conn)
             SELECT addIngredient('basil', 'Mushroom Quesadillas', 20);
             SELECT addIngredient('green bell pepper', 'Mushroom Quesadillas', 1);
             SELECT addIngredient('taco cheese', 'Mushroom Quesadillas', 100);
-            ")
+              ")
+
+    @conn.exec("
+            SELECT addIngredient('onion', 'Broccoli Stir Fry', 1);
+            SELECT addIngredient('broccoli', 'Broccoli Stir Fry', 300);
+            SELECT addIngredient('olive oil', 'Broccoli Stir Fry', 40);
+            SELECT addIngredient('sesame oil', 'Broccoli Stir Fry', 30);
+            SELECT addIngredient('soy sauce', 'Broccoli Stir Fry', 20);
+            SELECT addIngredient('brown sugar', 'Broccoli Stir Fry', 50);
+            SELECT addIngredient('long grain rice', 'Broccoli Stir Fry', 200);
+              ")
+  end
+
+  def list
+    res = @conn.exec("
+               SELECT * FROM FoodStuffs ORDER BY name ASC;
+               ")
+    tableize res
+  end
+
+  def add
+    name = ask("What do you wish to add?", answer_type = String) 
+
+    amount = ask("How much do you want to add?", answer_type = Integer) 
+    @conn.exec_prepared("AddFood", [name, amount])
+    say("Added #{amount} of #{name}.")
+  end
+
+  def delete
+    name = ask("What do you wish to delete?", answer_type = String) 
+    amount = ask("How much do you want to delete?", answer_type = Integer) 
+    @conn.exec_prepared("DeleteFood", [name, amount])
+  end
+
+  def cookable
+    res = @conn.exec("SELECT cookable();")
+    tableize res
+  end
+
+  def possibly_cookable
+    res = @conn.exec("SELECT possiblyCookable() EXCEPT SELECT cookable();")
+    tableize res
+  end
+
+  def list_conditions
+    recepie = ask("Which recepie are you interested in?", answer_type = String) 
+    res = @conn.exec_prepared("ListConditions", [recepie])
+    tableize res
+  end
+
+  def cook
+    recepie = ask("Which recepie do you want to cook?", answer_type = String)
+    @conn.exec_prepared("Cook", [recepie])
+  end
+
+  def shopping_list
+    recepies = ask("Which recepies do you want to buy ingredients for? Separate the recepie names with a comma.")
+    recepies.split(/\s*,\s*/).each do |recepie|
+    end
+  end
+
+  def tableize(res)
+    rows = []
+    rows << res.fields
+
+    res.each do |row|
+      rows << row.values
+    end
+
+    puts Terminal::Table.new :rows => rows
+  end
+
+  private :tableize
 end
 
+kitchen = Kitchen.new
+while true do
+  choose do |menu|
+    menu.prompt = "Choose your option:"
+
+    menu.choice("List supplies.") { kitchen.list }
+    menu.choice("Add food.") { kitchen.add }
+    menu.choice("Delete food.") { kitchen.delete }
+    menu.choice("List cookable recepies.") { kitchen.cookable }
+    menu.choice("List possibly cookable recepies.") { kitchen.possibly_cookable }
+    menu.choice("List conditions for recepie.") { kitchen.list_conditions }
+    menu.choice("Cook recepie.") { kitchen.cook }
+    menu.choice("Generate shopping list.") { kitchen.shopping_list }
+    menu.choice("Reset database.") { kitchen.reset }
+    menu.choice("Exit.") { exit }
+  end
+end
