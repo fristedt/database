@@ -12,6 +12,7 @@ class Kitchen
     @conn.prepare("AddFood", "SELECT addFood($1, $2)")
     @conn.prepare("DeleteFood", "SELECT deleteFood($1, $2)")
     @conn.prepare("ListConditions", "SELECT listConditions($1)")
+    @conn.prepare("ShoppingList", "SELECT shoppingList($1)")
     @conn.prepare("Cook", "SELECT cook($1)")
   end
 
@@ -144,6 +145,13 @@ class Kitchen
     tableize res
   end
 
+  def all
+    res = @conn.exec("
+               SELECT name FROM recepies ORDER BY name ASC;
+               ")
+    tableize res
+  end
+
   def add
     name = ask("What do you wish to add?", answer_type = String) 
 
@@ -180,9 +188,9 @@ class Kitchen
   end
 
   def shopping_list
-    recepies = ask("Which recepies do you want to buy ingredients for? Separate the recepie names with a comma.")
-    recepies.split(/\s*,\s*/).each do |recepie|
-    end
+    recipe = ask("What recipe do you want to buy ingredients for?")
+    res = @conn.exec_prepared("ShoppingList", [recipe])
+    tableize res
   end
 
   def tableize(res)
@@ -207,6 +215,7 @@ while true do
     menu.choice("List supplies.") { kitchen.list }
     menu.choice("Add food.") { kitchen.add }
     menu.choice("Delete food.") { kitchen.delete }
+    menu.choice("List all recepies.") { kitchen.all }
     menu.choice("List cookable recepies.") { kitchen.cookable }
     menu.choice("List possibly cookable recepies.") { kitchen.possibly_cookable }
     menu.choice("List conditions for recepie.") { kitchen.list_conditions }

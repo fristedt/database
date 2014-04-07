@@ -70,6 +70,9 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION isPossiblyCookable(_recepie TEXT)
 RETURNS BOOLEAN AS $$
 BEGIN
+  IF isCookable(_recepie) THEN
+    RETURN false;
+  END IF;
   RETURN EXISTS (
     SELECT count(ingredient) FROM UsedIn WHERE recepie = _recepie GROUP BY recepie 
       HAVING count(ingredient) = (
@@ -111,7 +114,9 @@ BEGIN
       INNER JOIN FoodStuffs
       ON name = ingredient
       WHERE recepie = _recepie AND FoodStuffs.amount IS NULL;
+    RETURN;
   END IF;
+  RAISE NOTICE 'You need to buy ingredients. Use generate shopping list instead.';
 END;
 $$
 LANGUAGE plpgsql;
